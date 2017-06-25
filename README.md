@@ -2,7 +2,7 @@
 
 Package for Sublime Text 3 which provides syntax highlighting for [Simplates](http://simplates.org/).
 
-TODO: Add screenshot
+![Screenshot](https://raw.githubusercontent.com/rohitpaulk/sublime-simplates/master/screenshot.png)
 
 ## Installation
 
