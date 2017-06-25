@@ -1,0 +1,56 @@
+%YAML 1.2
+---
+name: Simplate - Python
+file_extensions: [spt]
+scope: source.spt
+
+contexts:
+
+  main:
+    - match: ""
+      push: initialization_logic
+
+  initialization_logic:
+    # If we encounter a specline without content at this point,
+    # the request_logic section is starting.
+    - match: ^\[-{3,}\]$
+      scope: punctuation.separator
+      push: request_logic
+
+    - match: ^\[-{3,}\](?<=[^$])
+      scope: punctuation.separator
+      push: specline_for_content
+
+    # This is the initialization logic section, it contains Python code.
+    - include: "Packages/Python/Python.sublime-syntax"
+
+  request_logic:
+    # Another specline without content. Assume the remaining content is HTML.
+    - match: ^\[-{3,}\]$
+      scope: punctuation.separator
+      push: html_content
+
+    - match: ^\[-{3,}\](?<=[^$])
+      scope: punctuation.separator
+      push: specline_for_content
+
+    # Request logic is Python code too, just like initialization logic.
+    - include: "Packages/Python/Python.sublime-syntax"
+
+  specline_for_content:
+    - match: "via"
+      scope: keyword
+    - match: (jinja2|text\html)$
+      scope: entity.name
+      push: html_content
+    - match: \w
+      scope: entity.name
+    # Add more content sections!
+    - match: $
+      pop: true
+
+  html_content:
+    - match: ^\[-{3,}\]
+      scope: punctuation.separator
+      pop: true
+    - include: "Packages/Simplates/Jinja2/HTML (Jinja2).tmLanguage"
